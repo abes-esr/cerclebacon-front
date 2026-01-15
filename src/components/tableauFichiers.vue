@@ -4,6 +4,35 @@
       :headers="headers"
       class="data-table"
   >
+    <template v-slot:item.check="{ item }">
+      <v-btn
+          :href="'http://diplotaxis2-test.v202.abes.fr:15081/api/v1/checkfile/' + item.filename"
+          target="_blank"
+          density="compact"
+          size="small"
+      >
+        Check
+      </v-btn>
+    </template>
+    <template style="align-content: center"
+              v-slot:item.forceOption="{ item }">
+      <v-select
+          label="Select"
+          :items="['', 'FORCE', 'BYPASS']"
+          density="compact"
+          size="small"
+
+      ></v-select>
+    </template>
+    <template v-slot:item.logsFilename="{ item }">
+      <v-btn
+          :href="'http://diplotaxis2-test.v202.abes.fr:15081/api/v1/file/' + item.logsFilename"
+          density="compact"
+          size="small"
+      >
+        Voir
+      </v-btn>
+    </template>
   </v-data-table>
   <v-btn @click="console.log(fichiers)">test</v-btn>
 </template>
@@ -17,10 +46,11 @@ const headers = ref([
     {title: 'Provider', key: 'provider'},
     {title: 'Zone', key: 'zone'},
     {title: 'Package', key: 'packageName'},
+    {title: 'Check', key: 'check'},
     {title: 'Force Option', key: 'forceOption'},
     {title: 'Lines', key: 'linesUrl'},
-    {title: 'Logs', key: 'logsUrl'},
-    {title: 'Errors', key: 'ErrorsUrl'},
+    {title: 'Logs', key: 'logsFilename'},
+    {title: 'Errors', key: 'ErrorsFilename'},
     {title: 'Package Date', key: 'date'},
 ])
 const fichiers = ref([])
