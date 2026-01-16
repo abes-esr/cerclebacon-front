@@ -3,13 +3,16 @@ import axios from "axios";
 
 export class CercleBaconService {
 
+    getBaseUrl() {
+        return import.meta.env.VITE_BASE_URL
+    }
 
     client = axios.create({
-        baseURL: "http://localhost:8080"
+        baseURL: this.getBaseUrl()
     });
 
     getFiles(){
-        return this.client.get("/all");
+        return this.client.get("all");
     }
 
 }

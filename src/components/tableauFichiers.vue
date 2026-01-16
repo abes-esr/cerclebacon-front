@@ -20,15 +20,26 @@
           label="Select"
           :items="['', 'FORCE', 'BYPASS']"
           density="compact"
-          size="small"
-
       ></v-select>
     </template>
     <template v-slot:item.logsFilename="{ item }">
       <v-btn
-          :href="'http://diplotaxis2-test.v202.abes.fr:15081/api/v1/file/' + item.logsFilename"
+          :href="baseUrl + 'file/' + item.logsFilename"
           density="compact"
           size="small"
+          target="_blank"
+          v-if="item.logsFilename"
+      >
+        Voir
+      </v-btn>
+    </template>
+    <template v-slot:item.ErrorsFilename="{ item }">
+      <v-btn
+          :href="baseUrl + 'file/' + item.ErrorsFilename"
+          density="compact"
+          size="small"
+          target="_blank"
+          v-if="item.ErrorsFilename"
       >
         Voir
       </v-btn>
@@ -54,6 +65,8 @@ const headers = ref([
     {title: 'Package Date', key: 'date'},
 ])
 const fichiers = ref([])
+
+const baseUrl = cercleBaconService.getBaseUrl()
 
 onMounted(() => {
   setupData()
