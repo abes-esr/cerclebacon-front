@@ -3,6 +3,7 @@
       :items="fichiers"
       :headers="headers"
       class="data-table"
+      density="compact"
   >
     <template v-slot:item.check="{ item }">
       <v-btn
@@ -14,13 +15,16 @@
         Check
       </v-btn>
     </template>
-    <template style="align-content: center"
-              v-slot:item.forceOption="{ item }">
+    <template v-slot:item.forceOption="{ item }">
       <v-select
-          label="Select"
+          v-model="item.forceOption"
           :items="['', 'FORCE', 'BYPASS']"
+          variant="outlined"
+          hide-details
           density="compact"
-      ></v-select>
+          class="force-option-select"
+          placeholder="Select"
+      />
     </template>
     <template v-slot:item.logsFilename="{ item }">
       <v-btn
@@ -45,12 +49,17 @@
       </v-btn>
     </template>
   </v-data-table>
-  <v-btn @click="console.log(fichiers)">test</v-btn>
+  <v-btn
+      class="btn-modern mt-4"
+      @click="setupData"
+  >
+    Refresh
+  </v-btn>
 </template>
 
 <script setup>
 
-import {onMounted, ref} from "vue";
+import {onBeforeUnmount, onMounted, ref} from "vue";
 import cercleBaconService from "../services/cercleBaconService.js";
 
 const headers = ref([
@@ -68,8 +77,17 @@ const fichiers = ref([])
 
 const baseUrl = cercleBaconService.getBaseUrl()
 
+let interval
+
 onMounted(() => {
   setupData()
+  interval = setInterval(() => {
+    setupData()
+  }, 30000)
+})
+
+onBeforeUnmount(() => {
+  clearInterval(interval)
 })
 
 function setupData(){
