@@ -33,10 +33,10 @@
     background-color: #ffffff !important;
 }
 
-/* ---- Hover plus visible ---- */
 .v-data-table__tr:hover {
     background-color: #e6f0ff !important;
     transition: background-color 0.2s ease;
+    cursor: pointer;
 }
 
 /* ---- Bordure subtile ---- */
@@ -46,40 +46,35 @@
     overflow: hidden;
 }
 
+.refresh-hint {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 16px;
+}
 
 /* =====================================
-   BOUTONS PERSONNALISÉS
+   BOUTONS UTILITAIRES (TABLEAU)
    ===================================== */
 
-.v-btn {
+.v-btn:not(.btn-modern) {
     text-transform: none !important;
     font-weight: 500 !important;
     border-radius: 4px !important;
-    box-shadow: none !important;
     min-height: 26px !important;
     padding: 0 10px !important;
     font-size: 0.85rem !important;
     background-color: #f4f4f4 !important;
     color: #222 !important;
     border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    transition: background-color 0.15s ease, transform 0.1s ease;
 }
 
-.v-btn:hover {
-    background-color: #3b54f6 !important;
+.v-btn:not(.btn-modern):hover {
+    background-color: #c3d2ff !important;
     transition: background-color 0.2s ease;
 }
-
-/* Version "primaire" du bouton (par ex. Refresh) */
-.v-btn.primary {
-    background-color: #3b54f6 !important;
-    color: white !important;
-    border: none !important;
-}
-
-.v-btn.primary:hover {
-    background-color: #2563eb !important;
-}
-
 
 /* =====================================
    SELECT (Force Option)
@@ -142,46 +137,36 @@
 }
 
 /* =====================================
-   BOUTON MODERNE BLEU (Universel)
+   BOUTON REFRESH – ACTION DISCRÈTE
    ===================================== */
 
 .btn-modern {
     background: linear-gradient(180deg, #3b54f6 0%, #2f45d3 100%) !important;
     color: #fff !important;
     font-weight: 600 !important;
-    font-size: 0.95rem !important;
+    font-size: 0.85rem !important;
     text-transform: none !important;
-    letter-spacing: 0.3px !important;
-    border-radius: 8px !important;
-    padding: 10px 22px !important;
+    border-radius: 6px !important;
+    padding: 6px 14px !important;
     border: none !important;
-    box-shadow: 0 3px 6px rgba(59, 84, 246, 0.25);
+    box-shadow: 0 2px 4px rgba(59, 84, 246, 0.25);
     transition: all 0.2s ease;
 }
 
-/* survol : plus lumineux, plus dynamique */
+/* hover léger */
 .btn-modern:hover {
     background: linear-gradient(180deg, #4a63ff 0%, #3b54f6 100%) !important;
-    box-shadow: 0 5px 10px rgba(59, 84, 246, 0.3);
+    box-shadow: 0 3px 6px rgba(59, 84, 246, 0.35);
     transform: translateY(-1px);
 }
 
-/* clic : foncé et léger enfoncement */
 .btn-modern:active {
-    background: linear-gradient(180deg, #2c3fc0 0%, #2a39a9 100%) !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-    transform: translateY(1px);
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
-/* focus clavier : anneau de focus doux */
-.btn-modern:focus-visible {
-    outline: 2px solid rgba(59, 84, 246, 0.5);
-    outline-offset: 2px;
-}
-
-/* désactivation */
-.btn-modern:disabled {
-    opacity: 0.6 !important;
-    cursor: not-allowed !important;
-    box-shadow: none !important;
+.toolbar {
+    display: flex;
+    justify-content: center;
+    margin: 12px 16px;
 }

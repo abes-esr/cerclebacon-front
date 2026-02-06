@@ -4,6 +4,8 @@
       :headers="headers"
       class="data-table"
       density="compact"
+      :items-per-page="-1"
+      hide-default-footer
   >
     <template v-slot:item.check="{ item }">
       <v-btn
@@ -24,6 +26,7 @@
           density="compact"
           class="force-option-select"
           placeholder="Select"
+          @update:modelValue="onForceOptionChange(item)"
       />
     </template>
     <template v-slot:item.logsFilename="{ item }">
@@ -49,12 +52,18 @@
       </v-btn>
     </template>
   </v-data-table>
-  <v-btn
-      class="btn-modern mt-4"
-      @click="setupData"
-  >
-    Refresh
-  </v-btn>
+  <div class="refresh-hint">
+    Données mises à jour automatiquement toutes les 30 secondes
+  </div>
+  <div class="toolbar">
+    <v-btn
+        class="btn-modern"
+        @click="setupData"
+        :class="{ refreshing: isRefreshing }"
+    >
+      Refresh
+    </v-btn>
+  </div>
 </template>
 
 <script setup>
@@ -63,15 +72,15 @@ import {onBeforeUnmount, onMounted, ref} from "vue";
 import cercleBaconService from "../services/cercleBaconService.js";
 
 const headers = ref([
-    {title: 'Provider', key: 'provider'},
-    {title: 'Zone', key: 'zone'},
-    {title: 'Package', key: 'packageName'},
-    {title: 'Check', key: 'check'},
-    {title: 'Force Option', key: 'forceOption'},
-    {title: 'Lines', key: 'linesUrl'},
-    {title: 'Logs', key: 'logsFilename'},
-    {title: 'Errors', key: 'ErrorsFilename'},
-    {title: 'Package Date', key: 'date'},
+  {title: 'Provider', key: 'provider'},
+  {title: 'Zone', key: 'zone'},
+  {title: 'Package', key: 'packageName'},
+  {title: 'Check', key: 'check'},
+  {title: 'Force Option', key: 'forceOption'},
+  {title: 'Lines', key: 'linesUrl'},
+  {title: 'Logs', key: 'logsFilename'},
+  {title: 'Errors', key: 'ErrorsFilename'},
+  {title: 'Package Date', key: 'date'},
 ])
 const fichiers = ref([])
 
@@ -90,10 +99,27 @@ onBeforeUnmount(() => {
   clearInterval(interval)
 })
 
-function setupData(){
+function setupData() {
   cercleBaconService.getFiles()
       .then(response => fichiers.value = response.data)
       .catch(error => console.log(error))
+}
+
+function onForceOptionChange(item) {
+  // sécurité : on ne fait rien si vide
+  if (!item.forceOption) {
+    return
+  }
+
+  cercleBaconService.renameFile(item.filename, item.forceOption)
+      .then(() => {
+        console.log('Renommage OK pour', item.filename)
+        setupData() // refresh du tableau
+      })
+      .catch(error => {
+        console.error('Erreur renommage', error)
+        alert(error.response?.data || 'Erreur lors du renommage')
+      })
 }
 </script>
 

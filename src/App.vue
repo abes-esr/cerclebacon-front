@@ -1,14 +1,26 @@
 <template>
   <v-app>
-    <h1>Cercle Bacon 2.0</h1>
-    <tableau-fichiers ></tableau-fichiers>
+    <RouterView/>
+    <v-btn @click="consoleLog">
+      console.log
+    </v-btn>
+    <v-btn @click="route">
+      route
+    </v-btn>
   </v-app>
 </template>
 
 <script setup>
-import TableauFichiers from "./components/tableauFichiers.vue";
+import {useAuthStore} from "./store/AuthStore.js";
+import router from "./router/index.js";
+
+const AuthStore = useAuthStore()
+
+function consoleLog() {
+  console.log(AuthStore.isAuthenticated)
+}
+
+function route() {
+  router.push('/')
+}
 </script>
-
-<style scoped>
-
-</style>

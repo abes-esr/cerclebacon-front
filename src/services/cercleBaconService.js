@@ -14,5 +14,12 @@ export class CercleBaconService {
         return this.client.get("all");
     }
 
+    renameFile(fileName, forceOption) {
+        return this.client.post('renameFile', {
+            fileName: fileName,
+            forceOption: forceOption
+        })
+    }
+
 }
 export default new CercleBaconService();
