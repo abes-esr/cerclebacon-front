@@ -2,6 +2,7 @@
 import {ref, computed} from 'vue'
 import {useRouter} from 'vue-router'
 import {useAuthStore} from '../store/AuthStore'
+import cercleBaconService from '../services/cercleBaconService.js'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -21,9 +22,37 @@ const isValid = computed(() =>
     password.value.length <= 32
 )
 
+const errorMessage = ref('')
+const isLoading = ref(false)
+
 function submit() {
-  authStore.login()
-  router.push('/tableau')
+  isLoading.value = true
+  errorMessage.value = ''
+  cercleBaconService.login(login.value, password.value)
+      .then(response => {
+            console.log(response)
+            const userData = {
+              iln: response.data.iln,
+              userNum: response.data.userNum,
+              shortName: response.data.shortName,
+              role: response.data.role,
+              email: response.data.email
+            }
+            const token = `Bearer ${response.data.accessToken}`
+
+            authStore.login(userData, token)
+
+            cercleBaconService.setAuthToken(token)
+
+            router.push('/')
+          }
+      ).catch(error => {
+        console.error(error)
+        errorMessage.value = error.response?.data || 'Erreur lors de la connexion'
+      }
+  ).finally(() => {
+    isLoading.value = false
+  })
 }
 </script>
 
@@ -53,12 +82,14 @@ function submit() {
             counter
             density="compact"
         />
+        <p>{{ errorMessage }}</p>
       </v-card-text>
 
       <v-card-actions>
         <v-btn
             class="btn-modern"
             block
+            :loading="isLoading"
             :disabled="!isValid"
             @click="submit"
         >

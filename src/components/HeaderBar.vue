@@ -40,10 +40,13 @@
 
 import {useAuthStore} from "../store/AuthStore.js";
 import router from "../router/index.js";
-
-const userName = 'Eliott Lauwick'
+import {computed} from "vue";
 
 const authStore = useAuthStore()
+
+const userName = computed(
+    () => authStore.getUser?.shortName || 'Utilisateur'
+)
 
 function onLogout() {
   authStore.logout()
