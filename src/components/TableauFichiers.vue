@@ -153,6 +153,7 @@ async function checkFile(fileName) {
 function onClose() {
   body.value = ""
   title.value = ""
+  isDialogOpen.value = false
 }
 
 async function downloadFile(fileName) {
