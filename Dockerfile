@@ -1,4 +1,4 @@
-FROM node:24.11.0 AS build-image
+FROM node:24.22.1 AS build-image
 WORKDIR /build/
 COPY ./package*.json                /build/
 RUN npm ci
@@ -12,7 +12,7 @@ COPY ./docker/vuejs_env_placeholder /build/.env
 
 RUN npm run build
 
-FROM nginx:1.24.0 AS front-image
+FROM nginx:1 AS front-image
 COPY --from=build-image /build/dist /usr/share/nginx/html
 COPY ./docker/nginx-default.conf /etc/nginx/conf.d/default.conf
 COPY ./docker/docker-entrypoint.sh /
